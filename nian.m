@@ -8,7 +8,7 @@ clc;
 
 getnian = 0;
 output = zeros(1,1000000);
-for i = 1:1000000                       %i为抽取人数，共10000人
+for i = 1:1000000                       %i为抽取人数，共1000000人
     j = 0;                                  %j为抽取次数
     k = 0;                                  %k为当前抽取未出货次数
     getnian = 0;
@@ -40,10 +40,19 @@ for i = 1:1000000                       %i为抽取人数，共10000人
 end
 
 expect = mean(output(:));
-fprintf('经一百万次测试，平均需要%f抽才能出年，洗洗睡吧\n',expect)
+fprintf('经一百万次测试，平均需要%f抽才能出年\n',expect)
+standard_deviation = std(output);
+fprintf('标准差为%f\n',standard_deviation)
+fprintf('最大值为为%f\n',max(output))
+pct = prctile(output,[10,20,30,40,50,60,70,80,90]);
+
+for i = 1:9
+    fprintf('如果在%.f抽内出了年，则击败了%.f%%的玩家\n',pct(1,i),(10-i) * 10)
+end
 
 figure;
 cdfplot(output);
+title('累计分布');
 figure;
 ymin=min(output);
 ymax=max(output);
@@ -51,3 +60,4 @@ x=linspace(ymin,ymax,100);
 yy=hist(output,x);
 yy=yy/length(output);
 bar(x,yy)
+title('概率密度');
